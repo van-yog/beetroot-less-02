@@ -212,31 +212,72 @@ var products = [{
 }];
 /*  Business logics */
 
-var getProp = function getProp() {};
+var pipe = function pipe() {
+  for (var _len = arguments.length, fns = new Array(_len), _key = 0; _key < _len; _key++) {
+    fns[_key] = arguments[_key];
+  }
 
-var groupedItems = function groupedItems() {};
+  return function (x) {
+    return fns.reduce(function (v, f) {
+      return f(v);
+    }, x);
+  };
+};
 
-var sortBy = function sortBy() {};
+var curry = function curry(fn) {
+  return function () {
+    for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      args[_key2] = arguments[_key2];
+    }
 
-var getOpts = function getOpts() {};
+    return fn.bind.apply(fn, [null].concat(args));
+  };
+};
 
-var pipe = function pipe() {};
+var getProp = curry(function (opts, arr) {
+  return arr.map(function (item) {
+    return item[opts].toString();
+  });
+});
+
+var groupedItems = function groupedItems(arr) {
+  return Array.from(new Set(arr));
+};
+
+var sortBy = function sortBy(arr) {
+  return arr.sort(function (a, b) {
+    return a.toLowerCase().localeCompare(b.toLowerCase());
+  });
+};
+
+var getOpts = function getOpts(arr) {
+  return arr.map(function (item) {
+    return "<option>".concat(item, "</option>");
+  });
+};
 /* =========== client code ===============  */
 
 
-var usersSelect = document.getElementById("users-select"); //  Usage:
+var usersSelect = document.getElementById("users-select");
+var productsSelect = document.getElementById("products-select");
+var userFn = pipe(getProp("department"), groupedItems, sortBy, getOpts);
+var productFn = pipe(getProp("price"), groupedItems, sortBy, getOpts);
+var usersOpts = userFn(users);
+var productsOpts = productFn(products);
+usersSelect.innerHTML = usersOpts.join("");
+productsSelect.innerHTML = productsOpts.join(""); //  Usage:
 // getProps может принимать department, age, name, price, title
 
 /* 
-const userFn = pipe(getProp("department"), groupedItems, sortBy, getOpts);
-const productFn = pipe(getProp("price"), groupedItems, sortBy, getOpts);
-
-const usersOpts = userFn(users);
-const productsOpts = productFn(products);
-
-usersSelect.innerHTML = usersOpts.join("");
-productsSelect.innerHTML = productsOpts.join("");
- */
+  const userFn = pipe(getProp("department"), groupedItems, sortBy, getOpts);
+  const productFn = pipe(getProp("price"), groupedItems, sortBy, getOpts);
+  
+  const usersOpts = userFn(users);
+  const productsOpts = productFn(products);
+  
+  usersSelect.innerHTML = usersOpts.join("");
+  productsSelect.innerHTML = productsOpts.join("");
+   */
 },{}],"C:/Users/Администратор/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -265,7 +306,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60966" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51023" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -42,37 +42,19 @@ const products = [
 ];
 
 /*  Business logics */
-const pipe = (...fns) => (x) => fns.reduce((v, f) => f(v), x);
-const curry = (fn) => (...args) => fn.bind(null, ...args);
-
-const getProp = curry((opts, arr) => arr.map((item) => item[opts].toString()));
+const getProp = (ob, opts) => ob.map((item) => item[opts].toString());
 const groupedItems = (arr) => Array.from(new Set(arr));
 const sortBy = (arr) =>
   arr.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
 const getOpts = (arr) => arr.map((item) => `<option>${item}</option>`);
 
 /* =========== client code ===============  */
 const usersSelect = document.getElementById("users-select");
 const productsSelect = document.getElementById("products-select");
 
-const userFn = pipe(getProp("department"), groupedItems, sortBy, getOpts);
-const productFn = pipe(getProp("price"), groupedItems, sortBy, getOpts);
+let userOpts = getOpts(sortBy(groupedItems(getProp(users, "department"))));
+usersSelect.innerHTML = userOpts.join("");
 
-const usersOpts = userFn(users);
-const productsOpts = productFn(products);
-
-usersSelect.innerHTML = usersOpts.join("");
+let productsOpts = getOpts(sortBy(groupedItems(getProp(products, "price"))));
 productsSelect.innerHTML = productsOpts.join("");
-
-//  Usage:
-// getProps может принимать department, age, name, price, title
-/* 
-  const userFn = pipe(getProp("department"), groupedItems, sortBy, getOpts);
-  const productFn = pipe(getProp("price"), groupedItems, sortBy, getOpts);
-  
-  const usersOpts = userFn(users);
-  const productsOpts = productFn(products);
-  
-  usersSelect.innerHTML = usersOpts.join("");
-  productsSelect.innerHTML = productsOpts.join("");
-   */

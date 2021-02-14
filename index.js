@@ -1,1 +1,1 @@
-import "./ramda/task4";
+import "./home/memo";
