@@ -10,13 +10,17 @@
 
 const fetchItem = (id, ob) => {
   let start = new Date().getTime();
-  while (new Date().getTime() - start < 1000);
+  while (new Date().getTime() - start < 2000);
   return { id, ...ob };
 };
 
 const memo = (f) => {
   let cashe = new Set();
-  return (...arg) => (!cashe[arg] && (cashe[arg] = f(...arg))) || cashe[arg];
+  return (...arg) => {
+    let key = JSON.stringify(arg);
+    !cashe[key] && (cashe[key] = f(...arg));
+    return cashe[key];
+  };
 };
 
 const memoFetchItem = memo(fetchItem);

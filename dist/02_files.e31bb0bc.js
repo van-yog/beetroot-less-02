@@ -136,7 +136,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var fetchItem = function fetchItem(id, ob) {
   var start = new Date().getTime();
 
-  while (new Date().getTime() - start < 1000) {
+  while (new Date().getTime() - start < 2000) {
     ;
   }
 
@@ -152,7 +152,9 @@ var memo = function memo(f) {
       arg[_key] = arguments[_key];
     }
 
-    return !cashe[arg] && (cashe[arg] = f.apply(void 0, arg)) || cashe[arg];
+    var key = JSON.stringify(arg);
+    !cashe[key] && (cashe[key] = f.apply(void 0, arg));
+    return cashe[key];
   };
 };
 
@@ -203,7 +205,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51023" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52769" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
